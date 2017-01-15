@@ -1,0 +1,6 @@
+
+JAVA8=ls -1 /Library/Java/JavaVirtualMachines/ | grep "jdk1.8.*.jdk"
+
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/$JAVA8
+
+export PATH=$JAVA_HOME/bin:$PATH
