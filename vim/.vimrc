@@ -24,7 +24,8 @@ Plugin 'gmarik/Vundle.vim'
 "**************** UTILITY *****************"
 
 " Better status bar
-Plugin 'bling/vim-airline'
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
 
 " Easy commenting
 Plugin 'scrooloose/nerdcommenter'
