@@ -2,12 +2,10 @@
 
 if [ "$(uname)" = Darwin ]; then
 
-    /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
     brew update
 
     brew install vim --override-system-vi
 
-    brew install git
     brew install tig
 
     brew install maven
@@ -22,7 +20,6 @@ elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
     sudo apt-get install -y curl
     sudo apt-get install -y vim
 
-    sudo apt-get install -y git
     sudo apt-get install -y tig
 
     sudo apt-get install -y maven

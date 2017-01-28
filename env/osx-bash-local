@@ -1,6 +1,15 @@
+#!/bin/bash
 
-JAVA8=ls -1 /Library/Java/JavaVirtualMachines/ | grep "jdk1.8.*.jdk"
+# Variables
+
+JAVA8=$(ls -1 /Library/Java/JavaVirtualMachines | grep "jdk1.8.*.jdk")
+
+
+# Exports
 
 export JAVA_HOME=/Library/Java/JavaVirtualMachines/$JAVA8
-
 export PATH=$JAVA_HOME/bin:$PATH
+
+# Aliases
+
+alias tig="tig --all"

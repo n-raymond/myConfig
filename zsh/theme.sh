@@ -14,7 +14,7 @@
 
 # Uncoment the theme you are currently using
 #SOURCE_THEME=robbyrussell
-SOURCE_THEME=agnoster
+SOURCE_THEME=robbyrussell
 
 REPO_URL=https://gist.github.com/e456229c0a773c32d37b.git
 REPO_DIR=/tmp/agnoster-repo
@@ -40,6 +40,3 @@ sed -e "s/$SOURCE_THEME/agnoster-newline/" $ZSHRC > $TMP_FILE
 mv $TMP_FILE $ZSHRC
 
 
-# Rerun zsh
-
-zsh
