@@ -28,6 +28,10 @@ TMP_FILE=/tmp/zshrc.temp
 
 # Install Theme
 
+echo "\nInstall ZSH Theme\n"
+echo "=-=-=-=-=-=-=-=-=\n\n"
+
+
 git clone $REPO_URL $REPO_DIR
 cp $REPO_DIR/*.zsh-theme $THEMES_DIR
 rm -Rf $REPO_DIR
@@ -35,6 +39,9 @@ rm -Rf $REPO_DIR
 
 
 # Write Configuration
+
+echo "\nSetting Theme as default zsh theme\n"
+echo "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\n\n"
 
 sed -e "s/$SOURCE_THEME/agnoster-newline/" $ZSHRC > $TMP_FILE
 mv $TMP_FILE $ZSHRC

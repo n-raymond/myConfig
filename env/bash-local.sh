@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 
 
+printf "\nIntalling .bash_local\n"
+printf "=-=-=-=-=-=-=-=-=-=-=\n\n"
+
+
 if [ "$(uname)" = Darwin ]; then
 
     cp osx-bash-local ~/.bash_local
