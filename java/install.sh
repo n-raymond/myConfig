@@ -7,13 +7,16 @@ if [ "$(uname)" = Darwin  ]; then
 
 elif [ "$(expr substr $(uname -s) 1 5)" == "Linux"  ]; then
 
-    echo "deb http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main
-    deb-src http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main" >> test.txt
-
-    sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys EEA14886
+    sudo add-apt-repository ppa:openjdk-r/ppa
 
     sudo apt-get update
-    sudo apt-get install oracle-java8-installer
+    sudo apt-get install openjdk-8-jdk
+
+    sudo update-alternatives --config java
+
+    sudo update-alternatives --config javac
+
+    java -version
 
 fi
 
