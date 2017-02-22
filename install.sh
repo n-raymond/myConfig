@@ -31,15 +31,16 @@ printf "******************\n\n"
 cd $CURRENT_DIR/zsh  && ./install.sh
 
 
+cd $CURRENT_DIR/docker && ./install.sh
+
+
 
 printf "\n\nInstallation Succed !\n\n"
 
 printf "Remainings installations:\n\n
 
-        - Docker:\n
+        - Docker (if OSX):\n
             OSX: https://docs.docker.com/docker-for-mac/\n
-            Linux: https://docs.docker.com/engine/installation/linux/ubuntulinux/\n
-            Debian: https://docs.docker.com/engine/installation/linux/debian/\n
 
         - Intellij IDEA\n
 
