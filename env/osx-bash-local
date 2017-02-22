@@ -5,11 +5,14 @@
 JAVA8=$(ls -1 /Library/Java/JavaVirtualMachines | grep "jdk1.8.*.jdk")
 
 
-# Exports
+# Aliases
+
+alias rm='rm -i'
+alias tig="tig --all"
+
+
+# Environment Variables
 
 export JAVA_HOME=/Library/Java/JavaVirtualMachines/$JAVA8/Contents/Home
 export PATH=$JAVA_HOME/bin:$PATH
 
-# Aliases
-
-alias tig="tig --all"
