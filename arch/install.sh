@@ -28,5 +28,12 @@ printf "*********************\n\n"
 
 cd $CURRENT_DIR/docker && ./install.sh
 
+printf "\n\n********************\n"
+printf "* SETTING SPARK... *\n"
+printf "********************\n\n"
+
+cd $CURRENT_DIR/spark && ./install.sh
+
+
 printf "\n\nInstallation Succed !\n\n"
 
