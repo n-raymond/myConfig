@@ -1,0 +1,29 @@
+#!/bin/bash
+
+# Aliases
+
+alias rm='rm -i'
+alias tig="tig --all"
+
+
+# VTE Configuration for Tilix
+
+if [ $TILIX_ID ] || [ $VTE_VERSION ]; then
+    source /etc/profile.d/vte.sh
+fi
+
+
+# Java Configuration
+
+export JAVA_HOME=/usr/lib/jvm/java-8-openjdk
+
+
+# Spark Configuration
+
+export SPARK_DIST_CLASSPATH=$(hadoop classpath)
+
+
+# Path
+
+export PATH=$JAVA_HOME/bin:$PATH
+
