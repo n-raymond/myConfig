@@ -57,3 +57,7 @@ printf "\n===> Installing Intellij\n\n"
 
 yaourt -S intellij-idea-ultimate-edition
 
+printf "\n===> Installing Redshift\n\n"
+
+yaourt -S redshift
+
