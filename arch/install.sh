@@ -4,36 +4,20 @@ set -e
 
 CURRENT_DIR=$PWD
 
-printf "\n\n******************\n"
-printf "* SETTING ENV... *\n"
-printf "******************\n\n"
+function install() {
+    printf "\n\n*****************\n"
+    printf "* Setting $1... *\n"
+    printf "*****************\n\n"
 
-cd $CURRENT_DIR/env  && ./install.sh
+    cd $CURRENT_DIR/$1  && ./install.sh
+}
 
-printf "\n\n******************\n"
-printf "* SETTING VIM... *\n"
-printf "******************\n\n"
-
-cd $CURRENT_DIR/vim  && ./install.sh
-
-printf "\n\n******************\n"
-printf "* SETTING ZSH... *\n"
-printf "******************\n\n"
-
-cd $CURRENT_DIR/zsh  && ./install.sh
-
-printf "\n\n*********************\n"
-printf "* SETTING DOCKER... *\n"
-printf "*********************\n\n"
-
-cd $CURRENT_DIR/docker && ./install.sh
-
-printf "\n\n********************\n"
-printf "* SETTING SPARK... *\n"
-printf "********************\n\n"
-
-cd $CURRENT_DIR/spark && ./install.sh
-
+install ssh
+install env
+install vim
+install zsh
+install docker
+install spark
 
 printf "\n\nInstallation Succed !\n\n"
 
