@@ -3,7 +3,6 @@
 # Aliases
 
 alias rm='rm -i'
-alias tig="tig --all"
 
 
 # VTE Configuration for Tilix
