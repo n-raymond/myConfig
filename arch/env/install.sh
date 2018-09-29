@@ -1,63 +1,70 @@
 #!/usr/bin/env bash
 
+installer="yaourt"
 
-printf "\n===> Installing .yaourtrc in \$HOME\n\n"
+function sysout() {
+        printf "\n===> $1\n\n"
+}       
+
+
+
+sysout "Installing .yaourtrc in \$HOME"
 
 cp yaourtrc ~/.yaourtrc
 
-printf "\n===> Installing .bash_local in \$HOME\n\n"
+sysout "Installing .bash_local in \$HOME"
 
 cp bash_local ~/.bash_local
 
-printf "\n===> Installing yaourt\n\n"
+sysout "Installing yaourt"
 
 sudo pacman -S yaourt
 
-printf "\n===> Updating yaourt\n\n"
+sysout "Updating yaourt"
 
-yaourt -Syu
+$installer -Syu
 
-printf "\n===> Installing tig\n\n"
+sysout "Installing tig"
 
-yaourt -S tig
+$installer -S tig
 
-printf "\n===> Installing gitkraken\n\n"
+sysout "Installing gitkraken"
 
-yaourt -S gitkraken
+$installer -S gitkraken
 
-printf "\n===> Installing scala\n\n"
+sysout "Installing scala"
 
-yaourt -S scala
+$installer -S scala
 
-printf "\n===> Installing sbt\n\n"
+sysout "Installing sbt"
 
-yaourt -S sbt
+$installer -S sbt
 
-printf "\n===> Installing postman\n\n"
+sysout "Installing postman"
 
-yaourt -S postman
+$installer -S postman
 
-printf "\n===> Installing chromium\n\n"
+sysout "Installing chromium"
 
-yaourt -S chromium
+$installer -S chromium
 
-printf "\n===> Installing slack\n\n"
+sysout "Installing slack"
 
-yaourt -S slack-desktop
+$installer -S slack-desktop
 
-printf "\n===> Installing printer utilities\n\n"
+sysout "Installing printer utilities"
 
-yaourt -S manjaro-printer
+$installer -S manjaro-printer
 
-printf "\n===> Installing tilix\n\n"
+sysout "Installing tilix"
 
-yaourt -S tilix
+$installer -S tilix
 
-printf "\n===> Installing Intellij\n\n"
+sysout "Installing Intellij"
 
-yaourt -S intellij-idea-ultimate-edition
+$installer -S intellij-idea-ultimate-edition
 
-printf "\n===> Installing Redshift\n\n"
+sysout "Installing Redshift"
 
-yaourt -S redshift
+$installer -S redshift
 
