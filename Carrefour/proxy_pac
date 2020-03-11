@@ -1,0 +1,773 @@
+function FindProxyForURL(url, host)
+{
+
+// Country Proxy
+var PxCountry = "PROXY 10.176.205.3";
+var PxBackup = "PROXY 10.54.64.5";
+var PxINTRA = "PROXY 10.55.5.7";
+var INTRA = PxINTRA + ":8080;";
+var D2ININTRA = PxINTRA + ":8092;" + PxBackup + ":8092;DIRECT";
+
+// ==== INCLUDE BEGIN : /common/qos-default.pac
+//-------------------------------------------------
+// File : qos-default.pac
+// Author : Carrefour GNT
+// Description : QOS Default rules for C4 Group
+//
+// Last Changes : 2011-08-10
+// 
+//-------------------------------------------------
+
+// Global Proxy
+var PxGrp = "PROXY 10.49.64.5";
+var PxBackup  = "PROXY 10.54.64.5";
+var PxBackup2 = "PROXY 10.49.64.5";
+var PxTest = "PROXY 10.49.64.6";
+var PxSquid = "PROXY 10.49.64.36";
+var PxAdc = "PROXY 10.151.111.1";
+var PxEdc = "PROXY 10.244.3.3";
+var PxCdc = "PROXY 10.151.227.3";
+var PxMassy = "PROXY 10.176.205.3";
+var PxIntBr = "PROXY 10.113.184.14:8080";
+
+//QOS Global Rules
+var D1IN  = PxCountry + ":8090;" + PxBackup + ":8090;DIRECT";
+var D1OUT = PxCountry + ":8091;" + PxBackup + ":8091;DIRECT";
+
+var D2IN  = PxCountry + ":8092;" + PxBackup + ":8092;DIRECT";
+var D2INTEST = PxTest + ":8092;" + PxBackup + ":8092;DIRECT";
+var D2INGRP = PxGrp + ":8092;" + PxBackup + ":8092;" + PxCountry + ":8092;DIRECT";
+var D2INADC = PxAdc + ":8092;" + PxCountry + ":8092;DIRECT";
+var D2INEDC = PxEdc + ":8092;" + PxCountry + ":8092;DIRECT";
+var D2INCDC = PxCdc + ":8092;" + PxCountry + ":8092;DIRECT";
+
+var D2OUT = PxCountry + ":8093;" + PxBackup + ":8093;DIRECT";
+var D2OUTGRP = PxGrp + ":8093;" + PxBackup + ":8093;" + PxCountry + ":8093;DIRECT";
+
+var D3IN  = PxCountry + ":8094;" + PxBackup + ":8094;DIRECT";
+var D3INTEST  = PxTest + ":8094;" + PxBackup + ":8094;DIRECT";
+var D3INGRP = PxGrp + ":8094;" + PxBackup + ":8094;" + PxCountry + ":8094;DIRECT";
+
+var D3OUT = PxCountry + ":8080;" + PxBackup + ":8080;DIRECT";
+var D3OUTGRP = PxGrp + ":8080;" + PxBackup + ":8080;" + PxCountry + ":8080;DIRECT";
+var D3OUTADC = PxAdc + ":8080;" + PxCountry + ":8080;DIRECT";
+var D3OUTEDC = PxEdc + ":8080;" + PxCountry + ":8080;DIRECT";
+var D3OUTCDC = PxCdc + ":8080;" + PxCountry + ":8080;DIRECT";
+
+// carfourlink
+var MASSY = PxMassy + ":8080;" + PxBackup + ":8080;DIRECT";
+
+var SQUID = PxSquid + ":8080;";
+
+//End of QOS Global Rules
+
+// ==== INCLUDE END : /common/qos-default.pac
+
+
+// ==== INCLUDE BEGIN : /common/default.pac
+//-------------------------------------------------
+// File : default.pac
+// Author : Carrefour GNT
+// Description : default proxy rules for C4 Group
+//
+// Last Changes : 07/2014 OJO
+//
+//-------------------------------------------------
+// Workaround for IE11
+if (shExpMatch(url, "http://dummy/"))
+	return "DIRECT";
+
+// Default rules
+	if (shExpMatch(host, "127.*")) { return "DIRECT"; }
+	if (shExpMatch(host, "local*")){ return "DIRECT"; }
+
+//SIT
+if (shExpMatch(host, "*.sit.phenix.fr.carrefour.com")) { return "PROXY 100.72.66.215:4239"; } 
+
+//UAT
+if (shExpMatch(host, "*.uat.phenix.fr.carrefour.com")) { return "PROXY 100.72.66.175:4239"; } 
+
+//PILOT
+if (shExpMatch(host, "sltbda*.dcn.fr.carrefour.com")) { return "PROXY 10.55.25.232:4239"; } 
+
+//PROD
+if (shExpMatch(host, "slp*.dcn.fr.carrefour.com")) { return "PROXY 10.55.150.57:4239";}
+
+//DEV
+if (shExpMatch(host, "*.dev.phenix.fr.carrefour.com")) { return "PROXY 10.244.5.172:4239"; }
+
+if (shExpMatch(host, "*.c.vg1np-pf-phenix-rec-7f.internal")) { return "PROXY proxy.phenix-rec.carrefour.com:4239"; }
+if (shExpMatch(host, "*.c.vg1p-pf-phenix-pre-57.internal")) { return "PROXY proxy.phenix-preprod.carrefour.com:4239"; }
+if (shExpMatch(host, "*.c.vg1p-pf-phenix-prd-fc.internal")) { return "PROXY proxy.phenix.carrefour.com:4239"; }
+
+//Remote
+	if (shExpMatch(host, "netconnect.carrefour.com") ) { return "DIRECT"; }
+	if (shExpMatch(host, "ras.carrefour.com") ) { return "DIRECT"; }
+// GNT
+	if (shExpMatch(host, "filexchange*.carrefour.com") ) { return "DIRECT"; }
+	if (shExpMatch(host, "whitepages.carrefour.com") ){ return "DIRECT"; }
+	if (shExpMatch(host, "webmail*.carrefour.com") ) { return "DIRECT"; }
+	if (shExpMatch(host, "meeting.carrefour.com") ) { return D2IN; }
+// 2013-07-22 - OJO
+	if (shExpMatch(host, "gnt-places.carrefour.com")) return "DIRECT";
+	if (shExpMatch(host, "gnt-admintool*.carrefour.com") ) { return D2IN; }
+	if (shExpMatch(host, "gnt*.carrefour.com") ) { return D2INGRP; }
+	if (shExpMatch(host, "wanalyze.carrefour.com") ) { return D2INGRP; }
+	if (shExpMatch(host, "collab.carrefour.com") ) { return "DIRECT"; }
+	if (dnsDomainIs(host, ".videoconf.carrefour.com"))  { return "DIRECT"; }
+//20141031 BKO #114019
+        if (shExpMatch(host, "collab-pp.carrefour.com") ) { return "DIRECT"; }
+//20150409 MSA #124908
+        //if (shExpMatch(host, "cgds.borntobealive.carrefour.com") ) { return "DIRECT"; }
+	if (shExpMatch(host, "ftp-prod.borntobealive.carrefour.com") ) { return "DIRECT"; }
+// Intragroup
+	// Pb resolution DNS mediaplayer OJO 2013-01-06
+	if (shExpMatch(host, "mediaintragroup.carrefour.com") ) { return D3OUT; }
+
+// CCF&RH
+	if (shExpMatch(host, "erecruitment.carrefour.com") ) { return "DIRECT"; }
+	if (shExpMatch(host, "erecruitmentbygnt.carrefour.com") ) { return D2IN; }
+
+	if (shExpMatch(host, "*.thales.carrefour.com")) { return "DIRECT"; }
+
+// A verifier JMG
+	if (shExpMatch(host, "intracert2.fr.carrefour.com")){ return "DIRECT"; }
+	if (shExpMatch(host, "fr-invoice.carrefour.com")) { return "DIRECT"; }
+	if (shExpMatch(host, "intrawebonlinebanking.carrefour.com")){ return "DIRECT"; }
+	if (shExpMatch(host, "intrawebxrt.carrefour.com")){ return "DIRECT"; }
+	if (shExpMatch(host, "cdgfrance.fr.carrefour.com") ){ return "DIRECT"; }
+	if (shExpMatch(host, "traceone.carrefour.com")){ return "DIRECT"; }
+// quicksign S2p
+if (shExpMatch(host, "signc4bq.carrefour.com"))     return D2IN;
+// Mandala
+//	if (shExpMatch(host, "mandala*.carrefour.com")){ return "DIRECT"; }
+
+// Capcareers
+//Ressource EDC
+//	if (shExpMatch(host, "capcareers.carrefour.com")){ return D2IN; }
+
+	if (shExpMatch(host, "training.capcareers.carrefour.com")){ return D2IN; }
+
+// TeXaS
+	if (shExpMatch(host, "texas.carrefour.com")){ return D2IN; }
+	if (shExpMatch(host, "textilinternacional.carrefour.com")) { return D2IN; }
+	if (shExpMatch(host, "ctsa.carrefour.com")) { return D2IN; }
+//
+	if (shExpMatch(host, "gestam.fr.carrefour.com")){ return "DIRECT"; }
+	if (shExpMatch(host, "sda.carrefour.com")){ return "DIRECT"; }
+// PSS
+	if (shExpMatch(host, "icare.carrefour.com"))  { return D2IN; }
+//	if (shExpMatch(host, "mist.carrefour.com"))  { return D2IN; }
+//	if (shExpMatch(host, "icc.carrefour.com")) { return D2IN; }
+	if (shExpMatch(host, "kitqualite.carrefour.com")) { return D2IN; }
+//	if (shExpMatch(host, "e-partners*.carrefour.com")) { return D2IN; }
+//	if (shExpMatch(host, "efood.carrefour.com")) { return D2IN; }
+//	if (shExpMatch(host, "dmgali*.carrefour.com")) { return D2IN; }
+//	if (shExpMatch(host, "tender.carrefour.com"))  { return D2IN; }
+	if (shExpMatch(host, "carin.carrefour.com")){ return D2IN; }
+	if (shExpMatch(host, "refcarr*.fr")){ return D2IN; }
+	if (shExpMatch(host, "pdf-codev2.carrefour.com")){ return "DIRECT";}
+
+// DCES
+	if (shExpMatch(host, "webimplantation.carrefour.com")){ return D2IN; }
+	if (shExpMatch(host, "webimplantation.*.carrefour.com")){ return D2IN; }
+	if (shExpMatch(host, "proveedores.es.carrefour.com")){ return D2IN; }
+	if (shExpMatch(host, "demarca*.carrefour.com")){ return D2IN; }
+	if (shExpMatch(host, "cataloguemdd.carrefour.com")){ return D2IN; }
+	if (shExpMatch(host, "ccna.carrefour.com")){ return D2IN; }
+	if (shExpMatch(host, "ccna.int.wcorp.carrefour.com")){ return D2IN; }
+	if (shExpMatch(host, "cauonlineint.carrefour.com")){ return D2IN; }
+	if (shExpMatch(host, "otb.carrefour.com")){ return D2IN; }
+	if (shExpMatch(host, "produccion.intranet.es.wcorp.carrefour.com")){ return D2IN; }
+	if (shExpMatch(host, "mbctr.int.wcorp.carrefour.com")){ return D2IN; }
+
+	//if (shExpMatch(host, "rcm.*.carrefour.com") ){ return D2IN; }
+	//if (shExpMatch(host, "acercm.*.carrefour.com") ){ return D2IN; }
+	//if (shExpMatch(host, "prercm.*.carrefour.com") ){ return D2IN; }
+
+	if (shExpMatch(host, "*.agentrics.com")) { return D2INGRP; }
+//	if (shExpMatch(host, "financial.carrefour.com") ){ return "DIRECT"; }
+
+// webconference
+	if (shExpMatch(host, "*.anywhereconference.com") ){ return D2IN; }
+
+// Finance  ticket 88308
+//	if (shExpMatch(host, "*.synertrade.com") ){ return D2IN; }
+
+// OJO	if (shExpMatch(host, "communication.carrefour.com") ) { return D3INGRP; }
+	if (shExpMatch(host, "online.carrefour.fr") ){ return D2IN; }
+
+// default rules for MBC
+	//if (shExpMatch(host, "mbc.*.carrefour.com") ){ return "DIRECT"; }
+	//if (shExpMatch(host, "*.mbc.*.carrefour.com") ){ return D2IN; }
+	//if (shExpMatch(host, "acembc.*.carrefour.com") ){ return "DIRECT"; }
+	//if (shExpMatch(host, "prembc.*.carrefour.com") ){ return "DIRECT"; }
+
+//  En Avant via les Px Groupes GS20090803
+	if (shExpMatch(host, "enavant.groupe.carrefour.com") ){ return D3INGRP; }
+// One2team projet strategique
+	if (shExpMatch(host, "way2success.carrefour.com") ){ return D2IN; }
+//	if (shExpMatch(host, "xendesktop.citrix.edc.carrefour.com"))  { return DIRECT; }
+
+//Ressources EDC
+//	if (shExpMatch(host, "epm.carrefour.com") ){ return D2IN; }
+//	if (shExpMatch(host, "epm-fdm.carrefour.com") ){ return D2IN; }
+//	if (shExpMatch(host, "rdf-hyper-pgc.edc.carrefour.com"))  { return DIRECT; }
+//	if (shExpMatch(host, "rdf-super-pgc.edc.carrefour.com"))  { return DIRECT; }
+//	if (shExpMatch(host, "boquery.carrefour.com"))  { return "DIRECT"; }
+//	if (shExpMatch(host, "evolan.carrefour.com"))  { return "DIRECT"; }
+//	if (shExpMatch(host, "evolan.ppd.carrefour.com"))  { return "DIRECT"; }
+//	if (shExpMatch(host, "sai-composer.carrefour.com"))  { return "DIRECT"; }
+//	if (shExpMatch(host, "sai-composer.ppd.carrefour.com"))  { return "DIRECT"; }
+
+// Pb sur bcp
+	if (shExpMatch(host, "infocentrebcp.carrefour.com") ){ return "DIRECT"; }
+
+// TBQ demande du reseau (de loic g)
+	if (shExpMatch(host, "tbq.fr.carrefour.com") ){ return D2IN; }
+// Portail HP
+	if (dnsDomainIs(host, "eu-p.serviceportal.hp.com")) { return D3OUTEDC; }
+
+// bo-portal-prd.carrefour.com li? au #89924 probl?me Ajax
+	if (shExpMatch(host, "bo-portal-prd.carrefour.com") ){ return "DIRECT";}
+// pricing.edc.carrefour.com - Pb doit etre en direct
+	if (shExpMatch(host, "pricing.edc.carrefour.com") ){ return "DIRECT";}
+// pricingplus-it.carrefour.com
+	if (shExpMatch(host, "pricingplus-it.carrefour.com") ){ return "DIRECT";}
+// pricingplus-it.edc.carrefour.com
+	if (shExpMatch(host, "pricingplus-it.edc.carrefour.com") ){ return "DIRECT";}
+
+// GMAO RT#131711
+if (shExpMatch(host, "gmao-fr-siege.ppd.carrefour.com") ){ return D2INEDC; }
+if (shExpMatch(host, "nomad-gmao-fr-siege.ppd.carrefour.com") ){ return D2INEDC; }
+if (shExpMatch(host, "gmao-fr-exploit.ppd.carrefour.com") ){ return D2INEDC; }
+if (shExpMatch(host, "gmao-fr-siege.carrefour.com") ){ return D2INEDC; }
+if (shExpMatch(host, "nomad-gmao-fr-siege.carrefour.com") ){ return D2INEDC; }
+if (shExpMatch(host, "gmao-fr-exploit.carrefour.com") ){ return D2INEDC; }
+
+// 20170223 SMA #170351 AND OJOU 20180307
+	if (shExpMatch(host, "sso-dev.carrefour.com") ) { return D2IN; }
+	if (shExpMatch(host, "sso-ppd.carrefour.com") ) { return D2IN; }
+	if (shExpMatch(host, "sso.carrefour.com") ) { return D2IN; }
+	if (shExpMatch(host, "sso-proxy-dev.carrefour.com") ) { return D2IN; }
+	if (shExpMatch(host, "sso-proxy-ppd.carrefour.com") ) { return D2IN; }
+	if (shExpMatch(host, "sso-proxy.carrefour.com") ) { return D2IN; }
+
+// FLA 22-07-2014
+	if (shExpMatch(host, "bfc.carrefour.com") ){ return D2INEDC; }
+	if (shExpMatch(host, "bfc.ppd.carrefour.com") ){ return D2INEDC; }
+
+// ==== INCLUDE BEGIN : /common/update-msav.pac
+	var PXUPDATE = "PROXY 10.49.64.132:8080";
+
+// Local update -> Direct
+	if (shExpMatch(url, "*:2967/*") ) { return "DIRECT"; }
+	// Symantec ports 8014, 8443, 9090
+	if (shExpMatch(host, "dgrootvsep*.dg.carrefour.com") ) { return "DIRECT"; }
+
+// AV
+	if (shExpMatch(host, "liveupdate.symantecliveupdate.com") ) { return PXUPDATE; }
+	if (shExpMatch(host, "liveupdate.symantec.com") ) { return PXUPDATE; }
+	if (shExpMatch(host, "update.symantec.com") ) { return PXUPDATE; }
+	if (shExpMatch(url, "www.symantec.com/avcenter/download.html") ) { return PXUPDATE; }
+
+// ==== INCLUDE END : /common/update-msav.pac
+
+
+//End of Default rules
+
+
+// ==== INCLUDE END : /common/default.pac
+
+
+//bypass px massy pour carfourlink.com
+        if (shExpMatch(host, "*.carfourlink.com")) return D2INNY;
+
+// Local subnet
+if (shExpMatch(host, "www.symphony.ext.adp.com")) return "DIRECT";
+if (shExpMatch(host, "www.zadig-tge.ext.adp.com")) return "DIRECT";
+if (shExpMatch(host, "federation.ext.adp.com")) return "DIRECT";
+if (shExpMatch(host, "hr-services.fr.ext.adp.com")) return "DIRECT";
+if (shExpMatch(host, "www.hrintelligence.ext.adp.com")) return "DIRECT";
+if (shExpMatch(host, "sso.ext.adp.com")) return "DIRECT";
+if (shExpMatch(host, "dwh-caronline.carrefour.com")) return "DIRECT";
+if (shExpMatch(host, "dwh-caronline-dev.carrefour.com")) return "DIRECT";
+if (shExpMatch(host, "dwh-caronline-test.carrefour.com")) return "DIRECT";
+if (shExpMatch(host, "intraapplications.fr.carrefour.com")) return "DIRECT";
+if (shExpMatch(host, "cvg.console.cloud.carrefour.com")) return "DIRECT";
+if (shExpMatch(host, "dgrootvtools01")) return "DIRECT";
+
+
+//20160524 THA RT#151852
+if (shExpMatch(host, "cvg.uat.carrefour.com")) return "DIRECT";
+if (shExpMatch(host, "cvg.drv.uat.carrefour.com")) return "DIRECT";
+if (shExpMatch(host, "cvg.cem.uat.carrefour.com")) return "DIRECT";
+if (shExpMatch(host, "cvg.cmm.uat.carrefour.com")) return "DIRECT";
+if (shExpMatch(host, "cvg.oos.uat.carrefour.com")) return "DIRECT";
+
+// Local Massy
+if (shExpMatch(host, "telecommande.massy.fr.carrefour.com")) return "DIRECT";
+
+// Country Rules
+
+//Sungard VPN L2L
+if (shExpMatch(host, "10.236.0.100")) return "DIRECT"; 
+if (shExpMatch(host, "10.236.0.101")) return "DIRECT"; 
+
+//20160831 MLV RT#157622
+if (shExpMatch(host, "100.67.0.15")) return "INTRA";
+if (shExpMatch(host, "100.67.0.16")) return "INTRA"; 
+if (shExpMatch(host, "100.67.0.17")) return "INTRA"; 
+if (shExpMatch(host, "100.67.0.18")) return "INTRA"; 
+if (shExpMatch(host, "100.67.0.19")) return "INTRA"; 
+
+
+if (shExpMatch(host, "swaps.carrefour.com")) return "DIRECT"; 
+if (shExpMatch(host, "swaps-bck.carrefour.com")) return "DIRECT"; 
+if (shExpMatch(host, "swaps.ppd.carrefour.com")) return "DIRECT";
+
+if (shExpMatch(host, "serverdev01.fr.carrefour.com")) return "DIRECT";
+
+if (shExpMatch(host, "intranet.promocash.com")) return "DIRECT";
+
+//redirection temporaire #149590
+if (shExpMatch(host, "siriel.fr.carrefour.com")) return MASSY;
+
+//workarround INSEE 20160921 MLV RT#159294
+if (shExpMatch(host, "www.insee.fr")) return PxBackup;
+
+//20170430 HGA RT#174370 intranet proximite
+if (shExpMatch(host, "intranetproximite.fr.carrefour.com")) return "DIRECT";
+
+//20170518 UTO RT#175107
+if (shExpMatch(host, "nova.mco.carrefour.com")) return "DIRECT";
+if (shExpMatch(host, "*.pom.mco.carrefour.com")) return "DIRECT";
+if (shExpMatch(host, "*.nova.az.carrefour.com")) return "DIRECT";
+if (isInNet(host,"100.66.0.0","255.255.248.0")) return "DIRECT";
+
+
+// ==== INCLUDE BEGIN : /common/cdc.pac
+// CDC Rules 
+	if (shExpMatch(host, "csnp71707b.cdc.carrefour.com") ) return "DIRECT";
+	if (shExpMatch(host, "csnp71708b.cdc.carrefour.com") ) return "DIRECT";
+//        if (shExpMatch(host, "*wfcn*.cdc.carrefour.com") ) return "DIRECT";
+//20170306 MLV RT#170639
+if (shExpMatch(host, "wf*.cdc.carrefour.com")) {
+		if (isInNet(myIpAddress(), "10.55.160.0","255.255.255.0") || 
+		isInNet(myIpAddress(), "10.55.156.0","255.255.254.0") || 
+		isInNet(myIpAddress(), "10.55.164.0","255.255.254.0") || 	
+		isInNet(myIpAddress(), "10.55.160.0","255.255.255.0") || 
+		isInNet(myIpAddress(), "10.55.159.0","255.255.255.128") ||	
+		isInNet(myIpAddress(), "10.132.195.0","255.255.255.0")) {return D2INCDC;}
+			else
+			{return "DIRECT";}
+	}
+	if (shExpMatch(host, "*.cdc.carrefour.com") ){ return D2INCDC; }
+	if (dnsDomainIs(host, "carrefour.com") ) {
+	  if (isInNet(host,"10.151.64.0","255.255.240.0")) return D2INCDC ;
+	  if (isInNet(host,"10.151.192.0","255.255.192.0")) return D2INCDC ;
+	  if (isInNet(host,"10.171.0.0","255.255.128.0")) return D2INCDC ;
+	}
+//CDC Rules no-dns access, no qos
+if (shExpMatch(host, "10.151.*") ) {
+    	if (isInNet(host,"10.151.64.0","255.255.240.0")) return D3OUTCDC ;
+	if (isInNet(host,"10.151.192.0","255.255.192.0")) return D3OUTCDC ;
+	}
+if (isInNet(host,"10.171.0.0","255.255.128.0")) return D3OUTCDC ;
+
+
+// ==== INCLUDE END : /common/cdc.pac
+
+// ==== INCLUDE BEGIN : /common/edc.pac
+//#130807 Hongkong Proxy pac - P4
+//       if (shExpMatch(host, "p4*.edc.carrefour.com")) { return "DIRECT"; } 
+//20170306 MLV RT#170639
+if (shExpMatch(host, "p4*.edc.carrefour.com")) {
+		if (isInNet(myIpAddress(), "10.55.160.0","255.255.255.0") || 
+		isInNet(myIpAddress(), "10.55.156.0","255.255.254.0") || 
+		isInNet(myIpAddress(), "10.55.164.0","255.255.254.0") || 	
+		isInNet(myIpAddress(), "10.55.160.0","255.255.255.0") || 
+		isInNet(myIpAddress(), "10.55.159.0","255.255.255.128") ||	
+		isInNet(myIpAddress(), "10.132.195.0","255.255.255.0")) {return D2INEDC;}
+			else
+			{return "DIRECT";}
+	}
+//       if (shExpMatch(host, "wftw*.edc.carrefour.com")) { return "DIRECT"; }
+//20170306 MLV RT#170639 
+if (shExpMatch(host, "wf*.edc.carrefour.com")) {
+		if (isInNet(myIpAddress(), "10.55.160.0","255.255.255.0") || 
+		isInNet(myIpAddress(), "10.55.156.0","255.255.254.0") || 
+		isInNet(myIpAddress(), "10.55.164.0","255.255.254.0") || 	
+		isInNet(myIpAddress(), "10.55.160.0","255.255.255.0") || 
+		isInNet(myIpAddress(), "10.55.159.0","255.255.255.128") ||	
+		isInNet(myIpAddress(), "10.132.195.0","255.255.255.0")) {return D2INEDC;}
+			else
+			{return "DIRECT";}
+	}
+       if (shExpMatch(host, "10.244.100.60") ) { return "DIRECT"; }
+       if (shExpMatch(host, "10.244.100.55") ) { return "DIRECT"; }
+       if (shExpMatch(host, "10.244.97.10") ) { return "DIRECT"; }  
+       if (shExpMatch(host, "wftw-st2.edc.carrefour.com") ) { return "DIRECT"; }
+       if (shExpMatch(host, "10.244.80.38") ) { return "DIRECT"; } 
+
+//20161213 THA RT#164621 Exception for Italy
+       if (shExpMatch(host, "qlikview.it.edc.carrefour.com") ) return "DIRECT";
+
+// ==== INCLUDE BEGIN : /common/edc.pac
+// -- EDC proxy Rules  
+// EDC Rules 
+	if (shExpMatch(host, "*.edc.carrefour.com") ){ return D2INEDC; }
+	if (dnsDomainIs(host, "carrefour.com") ) {
+		if (isInNet(host,"10.89.0.0","255.255.252.0")) return D2INEDC;
+		if (isInNet(host,"10.244.0.0","255.254.0.0")) return D2INEDC;
+		}
+//EDC Rules no-dns access, no qos
+// 20161019 MZA RT#160120
+if (shExpMatch(host, "10.*")) {
+	if (isInNet(host,"10.89.0.0","255.255.252.0")) return D3OUTEDC ;
+	if (isInNet(host,"10.244.0.0","255.254.0.0")) return D3OUTEDC ;
+}
+
+// JMT RT194780
+if (isInNet(host,"10.80.225.0","255.255.255.0")) return D2INEDC ;
+
+// ==== INCLUDE END : /common/edc.pac
+
+
+// ==== INCLUDE END : /common/edc.pac
+
+// ==== INCLUDE BEGIN : /common/asia.pac
+if (shExpMatch(host, "wft.*.carrefour.com") ) { return D2INADC; }
+
+// ADC Rules 
+if (shExpMatch(host, "*.adc.carrefour.com") ){ return D2INADC; }
+if (dnsDomainIs(host, "carrefour.com") ) {
+	if (isInNet(host,"10.151.96.0","255.255.224.0")) return D2INADC;
+}
+//ADC Rules no-dns access, no qos
+if (shExpMatch(host, "10.151.*") ) {
+	if (isInNet(host,"10.151.96.0","255.255.224.0")) return D3OUTADC;
+}
+
+//Asia office acces direct to wiki.asia.carrefour.com
+
+if (shExpMatch(host, "*.asia.carrefour.com") ) {
+	if (isInNet(host,"10.148.0.0","255.255.252.0")) return "DIRECT";
+}
+
+
+// ==== INCLUDE END : /common/asia.pac
+
+// ==== INCLUDE BEGIN : /france/non-stores/head-office/common/head-office.pac
+// head-office.pac
+//
+// EDC non match? car edc.pac
+//if (shExpMatch(host, "opticat.carrefour.com")) return D2INEDC;
+//if (shExpMatch(host, "mdctender.carrefour.com")) return D2INEDC;
+//if (shExpMatch(host, "fr.thales.carrefour.com")) return D2INEDC;
+//if (shExpMatch(host, "pdm.carrefour.com")) return D2INEDC;
+
+if (shExpMatch(host, "pss-report.carrefour.com")) return D2IN;
+if (shExpMatch(host, "intra-baseactiffrance.carrefour.com")) return D2IN;
+if (shExpMatch(host, "mytbq.carrefour.com")) return D2INEDC;
+
+
+//Geode
+if (shExpMatch(host, "geode-edc.ppd.carrefour.com")) return "DIRECT";
+if (shExpMatch(host, "xendesktop.citrix.edc.carrefour.com")) return "DIRECT";
+if (shExpMatch(host, "xendesktop.edc.carrefour.com")) return "DIRECT";
+if (shExpMatch(host, "collaborativepdf.carrefour.com")) return D2IN;
+if (shExpMatch(host, "intrareporting.fr.carrefour.com")) return "DIRECT";
+if (shExpMatch(host, "*.agilefabric.fr.carrefour.com")) return "DIRECT";
+
+//ireporting
+if (shExpMatch(host, "ireporting.fr.carrefour.com"))  return "DIRECT";
+if (shExpMatch(host, "pre-ireporting.fr.carrefour.com")) return "DIRECT";
+
+//SalleTestMassy #115931
+if (isInNet(host,"10.55.224.0","255.255.240.0")) return "DIRECT";
+
+// acces swaps/Sungard (pour CNBV Amsterdam)
+if (shExpMatch(host, "swaps.carrefour.com")) return "DIRECT";
+
+//RT155440 direct access
+if (shExpMatch(host, "tn3270e.amadeusprintservices.com")) return "DIRECT";
+if (shExpMatch(host, "www.carrefour.eu")) return D3OUTGRP;
+
+//traveldoo forcing du pac sur M2 incident 193706
+if (shExpMatch(host, "*.traveldoo.com")) return D3OUTGRP;
+if (shExpMatch(host, "*.traveldoo.carrefour.com")) return D3OUTGRP;
+if (shExpMatch(host, "*.carrefour.traveldoo.com")) return D3OUTGRP;
+
+// ==== INCLUDE END : /france/non-stores/head-office/common/head-office.pac
+
+// ==== INCLUDE BEGIN : /france/non-stores/common/non-stores.pac
+// non-stores.pac
+//
+// Derniere Modif : FLA 15/04/2014
+
+	if (shExpMatch(host, "qualif-web-meti-proximite.fr.carrefour.com")) return "DIRECT";
+
+// MZA 06/10/2016 #160341
+
+//  if (shExpMatch(host, "oasis.fr.carrefour.com")) return "DIRECT";
+//  if (shExpMatch(host, "preintoasis.fr.carrefour.com")) return "DIRECT";
+
+// 20170920 RDU RT#183637
+if (shExpMatch(host, "bo-portal-prod.carrefour.com")) return "DIRECT";
+if (shExpMatch(host, "bo-storereference-prod.carrefour.com")) return "DIRECT";
+
+// ==== INCLUDE END : /france/non-stores/common/non-stores.pac
+
+
+// ==== INCLUDE BEGIN : /france/common/france.pac
+//-------------------------------------------------
+// File : france.pac
+// Author : Carrefour GNT
+// Description : FRANCE proxy rules for C4 Group
+//
+// Last Changes : 2012-11-07 - OJO
+// 
+//-------------------------------------------------
+// ==== INCLUDE BEGIN : /common/limelight.pac
+// Limelight
+var PxLimelight = "PROXY px-tp-fr-limelight.carrefour.com";
+var D3LL  = PxLimelight + ":8080";
+
+
+if (shExpMatch(host, "video.limelight.com") ) {return D3LL;}
+if (shExpMatch(host, "api.video.limelight.com") ) return D3LL;
+if (shExpMatch(host, "videoplatform.limelight.com") ){ return D3LL;}
+if (shExpMatch(host, "link.videoplatform.limelight.com") ){ return D3LL;}
+if (dnsDomainIs(host, "lldns.net") ){ return D3LL;}
+if (dnsDomainIs(host, "delvenetworks.com") ){ return D3LL;}
+if (dnsDomainIs(host, "llnw.net") ){ return D3LL;}
+
+// Limelight - No auth
+
+if (shExpMatch(host, "livepass.conviva.com") ){ return D3OUT;}
+if (shExpMatch(host, "livepassdl.conviva.com") ){ return D3OUT;}
+
+
+// Videos Carrefour
+
+if (dnsDomainIs(host, "llnwd.net") ){ return D3LL;}
+
+// Video Carrefour - No auth
+
+if (shExpMatch(host, "videos.carrefour.com") ){ return D3OUT;}
+if (dnsDomainIs(host, "clickability.com") ){ return D3OUT;}
+if (dnsDomainIs(host, "lphbs.com") ){ return D3OUT;}
+if (dnsDomainIs(host, "useriq.com") ){ return D3OUT;}
+if (dnsDomainIs(host, "google-analytics.com") ){ return D3OUT;}
+
+
+// Arkadin
+
+if (dnsDomainIs(host, "llnw.on24.com") ){ return D3LL;}
+
+// Arkadin no-auth
+
+if (shExpMatch(host, "events.arkadin.com") ){ return D3OUT;}
+if (shExpMatch(host, "on24.com") ){ return D3OUT;}
+if (shExpMatch(host, "wcc.on24.com") ){ return D3OUT;}
+if (shExpMatch(host, "event.onlineseminarsolutions.com") ){ return D3OUT;}
+if (shExpMatch(host, "events.welcomeconference.com") ){ return D3OUT;}
+
+// ==== INCLUDE END : /common/limelight.pac
+
+
+// 2012-11-07 - OJO
+	if (shExpMatch(host, "registration.carrefour.com")) return "DIRECT";
+
+// Exemples : ciserver.st-quentin-78.fr.carrefour.com
+if (shExpMatch(host, "ciserver.*.fr.carrefour.com")) return "DIRECT";
+
+// b-process.com
+	if (shExpMatch(host, "*.b-process.com")) return D2IN;
+
+	if (shExpMatch(host, "172.30.150.15")) return D2OUT;
+	if (shExpMatch(host, "ext-hypermaree.fr.carrefour.com"))  return D3OUT;
+//Surf Internet fr.carrefour.com
+	if (shExpMatch(host, "ext-hyperFrais.fr.carrefour.com"))  return D2IN;
+	if (shExpMatch(host, "ext-hyperMaree.fr.carrefour.com"))  return D2IN;
+	if (shExpMatch(host, "ext-hyperfl.fr.carrefour.com"))     return D2IN;
+	if (dnsDomainIs(host, "softrack.fr") )                    return D2IN;
+	if (shExpMatch(host, "pandaproduction.fr.carrefour.com")) return D2IN;
+        if (shExpMatch(host, "altaixv6prod-fr.carrefour.com")) return D2IN;
+
+//Surf Internet carrefour.com
+        if (shExpMatch(host, "sawhello.carrefour.com")) return D2IN;
+
+// Les machines sur les CSS Homologatio ne marchent pas via les PxDC
+	if (shExpMatch(host, "intragta")) return "DIRECT";
+	if (shExpMatch(host, "intragta.fr.carrefour.com")) return "DIRECT";
+
+// Harmonie Peoplesoft Erteco
+if (shExpMatch(host, "frsvps-ed-dev.carrefour.com")) return "DIRECT";
+if (shExpMatch(host, "frsvps-ed.carrefour.com")) return "DIRECT";
+
+// intranets ERTECO
+// modification emagmoneyv2prd & frsvemm04rct #139037
+	if (shExpMatch(host, "emagmoneyv2prd.carrefour.com")) {
+		if (isInNet(myIpAddress(), "10.251.0.0", "255.255.0.0")) return "DIRECT";
+		if (isInNet(myIpAddress(), "10.226.0.0", "255.254.0.0")) return "DIRECT";
+		return "PROXY 10.248.10.70:4444";
+	}
+	if (shExpMatch(host, "frsvemm04rct.ed.root.local")) {
+		if (isInNet(myIpAddress(), "10.251.0.0", "255.255.0.0")) return "DIRECT";
+		if (isInNet(myIpAddress(), "10.226.0.0", "255.254.0.0")) return "DIRECT";
+		return "PROXY 10.248.10.70:4444";
+	}
+	
+        if (shExpMatch(host, "www.dia.fr"))  return D3OUT;
+        if (shExpMatch(host, "*.dia.fr")) return "PROXY 10.248.10.70:4444";
+	if (shExpMatch(host, "*.ed.fr.carrefour.com")) return "PROXY 10.248.10.70:4444";
+	if (shExpMatch(host, "*-ed.carrefour.com")) return "PROXY 10.248.10.70:4444";
+	if (shExpMatch(host, "*-ed-dev.carrefour.com")) return "PROXY 10.248.10.70:4444";
+	if (shExpMatch(host, "*.ed.root.local")) return "PROXY 10.248.10.70:4444";
+
+// Les machines sur SSL passent en direct
+	if (shExpMatch(host, ".ssl.fr.carrefour.com") ) return "DIRECT";
+
+//CARAT
+	if (shExpMatch(host, "carat.fr.carrefour.com") ) return "DIRECT";
+//ADP
+        if (shExpMatch(host, "*.ext.adp.com"))  return D2ININTRA;
+//MBC
+	if (shExpMatch(host, "mbc.fr.carrefour.com") ){ return "DIRECT"; }
+	if (shExpMatch(host, "acembc.fr.carrefour.com") ){ return "DIRECT"; }
+	if (shExpMatch(host, "prembc.fr.carrefour.com") ){ return "DIRECT"; }
+// GPF (bug de cache OJOU 2012-02-02)
+	if (shExpMatch(host, "mbcfr.int.wcorp.carrefour.com") ){ return "DIRECT"; }
+// RCM
+	if (shExpMatch(host, "rcm.fr.carrefour.com"))   { return "DIRECT"; }
+	if (shExpMatch(host, "acercm.fr.carrefour.com")){ return "DIRECT"; }
+
+//CRM
+	if (shExpMatch(host, "crm.fr.carrefour.com")) { return "DIRECT"; }
+	if (shExpMatch(host, "crmlogin.fr.carrefour.com")) { return "DIRECT"; }
+
+// bug java 2011 04 14 Denis Carlier
+	if (shExpMatch(host, "*intraportail.fr.carrefour.com")) { return "DIRECT"; }
+	if (shExpMatch(host, "*intragenpdf.fr.carrefour.com"))  { return "DIRECT"; }
+	if (shExpMatch(host, "*intraadmin.fr.carrefour.com"))   { return "DIRECT"; }
+// fin bug java 2011 04 14 Denis Carlier
+
+// bug appli recette Denis Carlier 12 03 2012
+	if (shExpMatch(host, "vltgef02.dcn.fr.carrefour.com"))   { return "DIRECT"; }
+
+
+// passes pas le proxy
+        if (shExpMatch(host, "prd.emag.carrefour.com") ) { return "DIRECT"; }
+        if (shExpMatch(host, "prd.emag.fr.carrefour.com") ) { return "DIRECT"; } // JDO 20160929 RT#159289
+//	if (shExpMatch(host, "intragdu.carrefour.com") ) { return "DIRECT"; }
+//	if (shExpMatch(host, "intrachampion.carrefour.com") ) { return "DIRECT"; }
+    if (shExpMatch(host, "10.236.0.64") ) { return "DIRECT"; }
+//Mise en exception - Serveurs Siebel 20130423 SBE #74413
+    if (shExpMatch(host, "10.55.133.65") ) { return "DIRECT"; }
+    if (shExpMatch(host, "10.55.133.70") ) { return "DIRECT"; }
+    if (shExpMatch(host, "10.55.133.6") ) { return "DIRECT"; }
+// Hosted in DC6
+	if (shExpMatch(host, "csd_portail.fr.carrefour.com"))   { return D2ININTRA; }
+// parametrage bornes Cuwa
+  //  if (shExpMatch(host, "cgds.borntobealive.carrefour.com")) return "DIRECT";
+    if (shExpMatch(host, "ftp-prod.borntobealive.carrefour.com")) return "DIRECT";
+        if (shExpMatch(host, "ema.carrefour.com"))  return D2IN;
+// Exception eloi A CONSERVER #88340 + eloi-centrale.fr.carrefour.com		
+      if (shExpMatch(host, "*eloi*.fr.carrefour.com"))   { return "DIRECT"; }
+
+//Exception eloi A CONSERVER #154012 
+     if (shExpMatch(host, "*vlpjbs07*.fr.carrefour.com"))   { return "DIRECT"; }
+     if (shExpMatch(host, "*vlpjbs15*.fr.carrefour.com"))   { return "DIRECT"; }
+
+// debug 2013-03-25 #72306
+//	if (shExpMatch(host, "agreagepft2.fr.carrefour.com"))   { return "DIRECT"; }
+//#74004	if (shExpMatch(host, "mandalav8.fr.carrefour.com"))   { return "DIRECT"; }
+//#74004	if (shExpMatch(host, "mandala.fr.carrefour.com"))   { return "DIRECT"; }
+//#93137	
+		if (shExpMatch(host, "sirielpreprod.fr.carrefour.com"))   { return "DIRECT"; }
+
+//Les plages IPs du DC via le PxDC --> pas de QoS INTRA
+	if (shExpMatch(host, "10.*") || shExpMatch(host, "205.201.*") || shExpMatch(host, "134.12*") ) {
+		if (isInNet(host,"10.55.0.0","255.255.192.0"))     return INTRA;
+		if (isInNet(host,"10.55.133.0","255.255.255.0"))   return INTRA;
+		if (isInNet(host,"10.55.192.0","255.255.240.0"))   return INTRA;
+		if (isInNet(host,"10.54.112.0","255.255.248.0"))   return INTRA;
+		if (isInNet(host,"10.48.160.0","255.255.254.0"))   return INTRA;
+		if (isInNet(host,"10.48.162.0","255.255.255.0"))   return INTRA;
+		if (isInNet(host,"10.201.228.0","255.255.254.0"))  return INTRA;                        
+		if (isInNet(host,"205.201.200.0","255.255.255.0")) return INTRA;
+		if (isInNet(host,"10.49.120.0","255.255.248.0"))   return INTRA;
+		if (isInNet(host,"10.50.10.0","255.255.255.0"))    return INTRA;
+		if (isInNet(host,"134.126.129.0","255.255.255.0")) return INTRA;
+		if (isInNet(host,"134.126.134.0","255.255.255.0")) return INTRA;
+		if (isInNet(host,"134.128.154.0","255.255.254.0")) return INTRA;        
+		if (isInNet(host,"10.49.92.96","255.255.255.240")) return INTRA; // FR3P9-MMA
+		if (isInNet(host,"10.49.92.144","255.255.255.240")) return INTRA; // FR3P70-EOLAS
+		if (isInNet(host,"10.49.50.112","255.255.255.240")) return INTRA; // ALTAVIA
+		if (isInNet(host,"10.50.226.240","255.255.255.240")) return INTRA; // EURONET
+
+		if (isInNet(host,"100.67.0.0","255.255.252.0")) return INTRA; // Softlayer NonProd
+	}
+//Les machines en carrefour.com dans plages IPs du DC via le PxDC --> D2ININTRA
+	if  (shExpMatch(host, "*.carrefour.com") ) {
+		if (isInNet(host,"10.55.0.0","255.255.192.0"))     return D2ININTRA;
+		if (isInNet(host,"10.55.133.0","255.255.255.0"))   return D2ININTRA;
+		if (isInNet(host,"10.55.192.0","255.255.240.0"))   return D2ININTRA;
+		if (isInNet(host,"10.54.112.0","255.255.248.0"))   return D2ININTRA;
+		if (isInNet(host,"10.48.160.0","255.255.254.0"))   return D2ININTRA;
+		if (isInNet(host,"10.48.162.0","255.255.255.0"))   return D2ININTRA;
+		if (isInNet(host,"10.201.228.0","255.255.254.0"))  return D2ININTRA;
+		if (isInNet(host,"205.201.4.0","255.255.255.0"))   return D2ININTRA;
+		if (isInNet(host,"205.201.200.0","255.255.255.0")) return D2ININTRA;
+		if (isInNet(host,"10.49.120.0","255.255.248.0"))   return D2ININTRA;
+		if (isInNet(host,"10.50.10.0","255.255.255.0"))    return D2ININTRA;
+		if (isInNet(host,"134.126.129.0","255.255.255.0")) return D2ININTRA;
+		if (isInNet(host,"134.126.134.0","255.255.255.0")) return D2ININTRA;
+		if (isInNet(host,"134.128.154.0","255.255.254.0")) return D2ININTRA;
+		if (isInNet(host,"10.49.92.96","255.255.255.240")) return D2ININTRA; // FR3P9-MMA
+		if (isInNet(host,"10.49.92.144","255.255.255.240")) return D2ININTRA; // FR3P70-EOLAS
+		if (isInNet(host,"10.49.50.112","255.255.255.240")) return D2ININTRA; // ALTAVIA
+		if (isInNet(host,"10.50.226.240","255.255.255.240")) return D2ININTRA; // EURONET
+		if (isInNet(host,"100.67.0.0","255.255.252.0")) return D2ININTRA; // Softlayer NonProd
+
+
+//Ticket #131919
+                if (shExpMatch(host, "portailrhpre.fr.carrefour.com"))  return D2IN;
+             }
+//Condition temp pour carfourlink #119642
+	        if (shExpMatch(host, "carfourlink.com") ){ return MASSY; }
+
+//Ticket #134276
+                if (shExpMatch(host, "chorus.carma.carrefour.com"))  return "DIRECT";
+                if (shExpMatch(host, "10.236.1.72"))  return "DIRECT";
+
+//RT #134276
+              if (shExpMatch(host, "r7signc4bq.carrefour.com")) return "DIRECT";
+              if (shExpMatch(host, "10.236.0.193"))  return "DIRECT";
+
+//RT #148611
+               if (shExpMatch(host, "eportal.services.ingenico.com"))  return "DIRECT";
+               if (shExpMatch(host, "91.208.214.21"))  return "DIRECT";
+// RT #153350
+	if (shExpMatch(host, "www.preprod.spectacles.carrefour.fr") ) { return D2INGRP; }
+
+// 2016-11-18 MZA RT#162907
+if (shExpMatch(host, "10.29.120.35")) return "DIRECT";
+
+// 20170302 JDO RT#170475
+if (shExpMatch(host, "jss.carrefour.com")) return "DIRECT";
+if (shExpMatch(host, "jds.carrefour.com")) return "DIRECT";
+
+// 20180226 JDO RT#193813
+if (shExpMatch(host, "acceptance.fr.carrefour.com")) return "DIRECT";
+if (shExpMatch(host, "sandbox-acceptance.fr.carrefour.com")) return "DIRECT";
+
+
+// ==== INCLUDE END : /france/common/france.pac
+
+
+// Default
+	return D3OUT;
+}

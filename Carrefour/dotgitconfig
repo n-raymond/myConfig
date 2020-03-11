@@ -1,0 +1,5 @@
+[user]
+	email = nicolas_raymond_1@carrefour.com
+	name = nraymond
+[credential]
+	helper = cache --timeout=3600

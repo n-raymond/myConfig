@@ -1,0 +1,82 @@
+#!/bin/bash
+
+# GCloud
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/opt/google-cloud-sdk/path.zsh.inc' ]; then . '/opt/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/opt/google-cloud-sdk/completion.zsl.inc' ]; then . '/opt/google-cloud-sdk/completion.zsh.inc'; fi
+
+# Aliases
+
+alias rm='rm -i'
+alias proxy_reconnect='while true; do curl google.com -sf > /dev/null && break; echo -n .; sleep 1; done'
+alias gitkraken='gitkraken > /dev/null 2>&1'
+alias kubebar='kubectl  --kubeconfig ~/.kube/prod-hamdi-makni.kubeconfig'
+
+
+# ssh-agent configuration
+
+if ! pgrep -u "$USER" ssh-agent > /dev/null; then
+    ssh-agent > ~/.ssh-agent-thing
+fi
+if [[ "$SSH_AGENT_PID" == "" ]]; then
+    eval "$(<~/.ssh-agent-thing)"
+fi
+
+# VTE Configuration for Tilix
+
+if [ $TILIX_ID ] || [ $VTE_VERSION ]; then
+    source /etc/profile.d/vte.sh
+fi
+
+
+# Editor
+
+export EDITOR='vim'
+
+
+# Carrefour configuration
+
+export PHENIX_USER_NAME=${USER}
+export PHENIX_USER_ID=$(id -u "${PHENIX_USER_NAME}")
+export PHENIX_GROUP_ID=$(id -g "${PHENIX_USER_NAME}")
+# uid of the group that owns the Docker socket (`/var/run/docker.sock`)
+export DOCKER_GROUP_ID=0
+
+export CARREFOUR_HOME=~/Projects/Carrefour
+source $CARREFOUR_HOME/scripts/proxy.sh
+export PATH=$PATH:$CARREFOUR_HOME/phenix-dev-tools/bin:$CARREFOUR_HOME/scripts
+export CARREFOUR_TOKEN='655c740795488e40835d6819588758f91b20499e'
+
+
+# Java Configuration
+
+export JAVA_HOME=/usr/lib/jvm/java-8-openjdk
+export JDK_HOME=$JAVA_HOME
+
+# Ruby Path
+
+export RUBY_PATH=$HOME/.gem/ruby/2.6.0
+
+# Path
+
+export PATH=$JAVA_HOME/bin:$SPARK_HOME/bin:$RUBY_PATH/bin:$(go env GOPATH)/bin:/opt/kubetail:$PATH
+
+
+# Library Path
+
+export LD_LIBRARY_PATH=$HADOOP_HOME/lib/native:$LD_LIBRAY_PATH
+
+
+# Credentials
+
+export PIXELHUB_NOTIFIER_EMAIL="pixelhub.notifyier@gmail.com"
+export PIXELHUB_NOTIFIER_CREDENTIALS="u/%,cCK6V~aI"
+
+export AD_NOTIFIER_DB_PASSWORD="reifiton4d"
+
+export DOCKER_HUB_USERNAME="nraymond"
+export DOCKER_HUB_PASSWORD="2.hl.%Te:@%m"
+

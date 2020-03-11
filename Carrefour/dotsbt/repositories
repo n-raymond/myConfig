@@ -1,0 +1,4 @@
+[repositories]
+  local
+  udd-ivy-proxy-releases: https://nexus.phenix.carrefour.com/content/groups/ivy-releases/, [organization]/[module]/(scala_[scalaVersion]/)(sbt_[sbtVersion]/)[revision]/[type]s/[artifact](-[classifier]).[ext]
+  udd-maven-proxy-releases: https://nexus.phenix.carrefour.com/content/groups/public/
