@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+set -o pipefail
+set -o nounset
+
+CMD_INPUT=$1
+SLEEP_INPUT=${2:-}
+
+SLEEP=${SLEEP_INPUT:="1s"}
+
+echo will execute command: ${CMD_INPUT}
+
+i=1
+echo attempt number $i
+${CMD_INPUT}
+RES=$?
+echo "command returned ${RES}"
+
+until [ ${RES} == 0 ]; do
+    echo "sleep ${SLEEP}"
+    sleep ${SLEEP}
+    let i+=1
+    echo "attempt number $i"
+    ${CMD_INPUT}
+    RES=$?
+    echo "command returned ${RES}"
+done
