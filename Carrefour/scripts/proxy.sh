@@ -1,6 +1,5 @@
 #!/bin/bash
 
-set -e
 
 ext=".backup"
 
@@ -131,6 +130,9 @@ docker_service_conf="${docker_service_folder}http-proxy.conf"
 docker_service_env="${docker_service_folder}http-proxy.env"
 
 set_docker_proxy() {
+
+    mkdir -p $docker_service_folder
+
     sudo bash << SUDO_EOF
 cat > $docker_service_conf << EOF
 [Service]
@@ -175,7 +177,7 @@ proxy_off() {
 wifi_id=$(ip addr show | awk '/inet.*brd/{print $NF; exit}')
 
 addr=$(ifconfig $wifi_id 2>/dev/null | sed -En 's/.*inet (addr:)?(([0-9]*\.){1}[0-9]*).*/\2/p')
-ppp=$(ifconfig ppp0 | sed -En 's/.*inet (addr:)?(([0-9]*\.){1}[0-9]*).*/\2/p')
+ppp=$(ifconfig ppp0 2> /dev/null | sed -En 's/.*inet (addr:)?(([0-9]*\.){1}[0-9]*).*/\2/p')
 
 [[ $addr == *10.176* || ${addr} == *10.18* || ${ppp} == *10.* ]] && proxy_on || proxy_off
 
