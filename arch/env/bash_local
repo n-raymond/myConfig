@@ -17,13 +17,7 @@ fi
 export JAVA_HOME=/usr/lib/jvm/java-8-openjdk
 
 
-# Spark Configuration
-
-export SPARK_DIST_CLASSPATH=$(hadoop classpath)
-export SPARK_HOME=/opt/apache-spark
-
-
 # Path
 
-export PATH=$JAVA_HOME/bin:$SPARK_HOME/bin:$PATH
+export PATH=$JAVA_HOME/bin:$PATH
 
